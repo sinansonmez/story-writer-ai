@@ -25,7 +25,7 @@ export default function Home() {
       model: params.model || "text-curie-001",
       prompt: (params.initialPrompt || defaultInitialPrompt) + prompt,
       temperature: 0.5,
-      max_tokens: 300,
+      max_tokens: 1500,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
     });
@@ -33,7 +33,7 @@ export default function Home() {
   };
 
   const createImage = async (prompt = "create an image for a tale about animals and one small girl and one small boy") => {
-    const shortenedPrompt = await generatePrompts({prompt, initialPrompt: "Shorten this prompt for dall-e api: "}) || "";
+    const shortenedPrompt = await generatePrompts({ prompt, initialPrompt: "Shorten this prompt for dall-e api: " }) || "";
     const response = await openai.createImage({
       prompt: "Create an image for a children tale: " + shortenedPrompt,
       n: 1,
@@ -44,10 +44,12 @@ export default function Home() {
 
   const handleSubmit = async () => {
     setLoading(true);
+    setImageUrl("");
+    setApiResponse("");
 
     try {
-      const result = await generatePrompts({prompt, model: "text-davinci-002"});
-      createImage(result);
+      const result = await generatePrompts({ prompt, model: "text-davinci-002" });
+      await createImage(result);
       setApiResponse(result || "");
     } catch (e) {
       setApiResponse('Something went wrong, please try again.');
@@ -56,43 +58,45 @@ export default function Home() {
     setLoading(false);
   };
 
-  if (loading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold mb-4">Loading</h1>
+  const renderImage = () => {
+    return image_url ? (
+      <div className="flex flex-col items-center justify-center">
+        <strong>Image:</strong>
+        <div>
+          <img src={image_url} />
         </div>
-      </main>
-    )
+      </div>
+    ) : null;
+  }
+
+  const renderTale = () => {
+    return apiResponse ? (
+      <div className="flex flex-col items-center justify-center">
+        <strong>API response:</strong>
+        <div>
+          {apiResponse}
+        </div>
+      </div>
+    ) : null;
   }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold mb-4">OpenAI Playground</h1>
-        <p className="text-xl mb-4">Enter a prompt and see what the AI generates!</p>
+        <h1 className="text-4xl font-bold mb-4">Write a tale using AI</h1>
+        <p className="text-xl mb-4">Enter a brief info about the tale</p>
         <div className="flex flex-col items-center justify-center">
-          <textarea className="border border-gray-400 rounded-lg p-2 mb-4" placeholder='enter a prompt...' value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+          <textarea maxLength={500} className="border border-gray-400 rounded-lg p-2 mb-4" placeholder='enter a prompt...' value={prompt} onChange={(e) => setPrompt(e.target.value)} />
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleSubmit()}>Generate</button>
         </div>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center">
+            <h1 className="text-4xl font-bold mb-4">Loading</h1>
+          </div>
+        ) : null}
+        {renderImage()}
+        {renderTale()}
       </div>
-      {image_url && (
-        <div className="flex flex-col items-center justify-center">
-          <strong>Image:</strong>
-          <div>
-            <img src={image_url} />
-          </div>
-        </div>
-      )}
-      {apiResponse && (
-        <div className="flex flex-col items-center justify-center">
-          <strong>API response:</strong>
-          {/* create a nice div to hold a response which is a story for kids */}
-          <div>
-            {apiResponse}
-          </div>
-        </div>
-      )}
     </main>
   )
 }
