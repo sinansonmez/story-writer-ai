@@ -53,7 +53,7 @@ export default function Home() {
       const result = await generatePrompts({ prompt, model: "text-davinci-002" });
       await createImage(result);
       setApiResponse(result || "");
-    } catch (e) {
+    } catch (e: any) {
       if (e.message == "Request failed with status code 429") {
         setQuoteError("Monthly quota exceeded, please try again next month.")
       }
