@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Description
 
-## Getting Started
+This is an open-source project that leverages OpenAI's APIs, React, Next.js, and TypeScript to generate short stories with images for children aged between 3-7
 
-First, run the development server:
+The project uses OpenAI to generate the text for the story and DALL-E to create an accompanying image. The application allows users to enter a brief prompt that the algorithm will use to generate the story. The output is a short story with an accompanying image that can be shared, printed, or saved.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Why I Created This Project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+I created this project to help parents, teachers, and caregivers create fun and engaging stories for young children. With so much of our lives moving online, I wanted to create a tool that would make it easy for people to generate stories for their kids that would help improve their reading skills, imagination, and creativity.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to Run Locally
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.ts`.
+To run the project locally, follow these steps:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Clone the repository to your local machine.
+- Install the required dependencies using ```npm install```.
+- Create an OpenAI API key and add them to your .env.local file.
+- Start the application using npm run dev.
+- Open your browser and navigate to http://localhost:3000.
 
-## Learn More
+## Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+StoryGen Screenshot
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Links
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+[Website](https://story-writer-ai.vercel.app)
+[Buy Me a Coffee](https://www.buymeacoffee.com/sinans)
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT license. See the LICENSE file for more information.
