@@ -114,8 +114,8 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center justify-center w-full">
-        <h1 className="text-4xl font-bold mb-4 text-gray-500">Write a tale using AI</h1>
-        <p className="text-xl mb-4 text-gray-500">Enter a brief info about the tale</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-500">Write a short story using AI</h1>
+        <p className="text-xl mb-4 text-gray-500">Enter a brief info about the story</p>
         <div className="flex flex-col items-center justify-center w-full">
           <Textarea maxLength={500} className="border border-gray-400 rounded-lg p-2 mb-4 w-full" placeholder='use your imagination...' value={prompt} onChange={(e) => setPrompt(e.target.value)} />
           <Button
