@@ -8,20 +8,24 @@ export default function Home() {
   const [image_url, setImageUrl] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const initialPrompt = "You are a tale writer for kids with age between 4-7. Tell me a story which is around 1000 words about this: "
-
   const configuration = new Configuration({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   });
   const openai = new OpenAIApi(configuration);
 
-  const generatePrompts = async (initialPrompt: string, prompt: string, model = "text-curie-001") => {
+  type PromptParams = {
+    prompt: string,
+    initialPrompt?: string,
+    model?: string
+  }
+
+  const generatePrompts = async (params: PromptParams) => {
+    const defaultInitialPrompt = "You are a tale writer for kids with age between 4-7. Tell me a story which is around 1000 words about this: "
     const response = await openai.createCompletion({
-      model,
-      prompt: initialPrompt + prompt,
-      temperature: 0,
-      max_tokens: 1000,
-      top_p: 1.0,
+      model: params.model || "text-curie-001",
+      prompt: (params.initialPrompt || defaultInitialPrompt) + prompt,
+      temperature: 0.5,
+      max_tokens: 300,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
     });
@@ -29,13 +33,11 @@ export default function Home() {
   };
 
   const createImage = async (prompt = "create an image for a tale about animals and one small girl and one small boy") => {
-    console.log("prompt: ", prompt)
-    const shortenedPrompt = await generatePrompts("Shorten this prompt for dall-e api: ", prompt) || "";
-    console.log("shortenedPrompt: ", shortenedPrompt)
+    const shortenedPrompt = await generatePrompts({prompt, initialPrompt: "Shorten this prompt for dall-e api: "}) || "";
     const response = await openai.createImage({
-      prompt: shortenedPrompt,
+      prompt: "Create an image for a children tale: " + shortenedPrompt,
       n: 1,
-      size: "1024x1024",
+      size: "512x512",
     });
     setImageUrl(response.data.data[0].url || "");
   }
@@ -44,7 +46,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const result = await generatePrompts(initialPrompt, prompt, "text-davinci-002");
+      const result = await generatePrompts({prompt, model: "text-davinci-002"});
       createImage(result);
       setApiResponse(result || "");
     } catch (e) {
