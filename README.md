@@ -20,12 +20,15 @@ To run the project locally, follow these steps:
 
 ## Screenshots
 
-StoryGen Screenshot
+![Screenshot 2023-04-30 at 21-26-07 Create Next App](https://user-images.githubusercontent.com/37421564/235377256-5d0bc04e-d422-4d13-ac74-c5140a9daf3e.png)
+
+![Screenshot 2023-04-30 at 21-20-20 Create Next App](https://user-images.githubusercontent.com/37421564/235377261-1b100323-8de7-4b4c-b348-d567ccc52711.png)
+
 
 Links
 
-[Website](https://story-writer-ai.vercel.app)
-[Buy Me a Coffee](https://www.buymeacoffee.com/sinans)
+- [Try it out](https://story-writer-ai.vercel.app)
+- [Buy Me a Coffee](https://www.buymeacoffee.com/sinans)
 
 ## License
 
