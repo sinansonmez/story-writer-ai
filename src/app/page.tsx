@@ -2,9 +2,13 @@
 import { Button, ButtonGroup, Textarea } from '@chakra-ui/react';
 import { Configuration, OpenAIApi } from 'openai';
 import { useState } from 'react'
+import AdditionalInfo from './additionalInfo';
 
 export default function Home() {
   const [prompt, setPrompt] = useState<string>("");
+  const [character, setCharacter] = useState<string>("");
+  const [activity, setActivity] = useState<string>("");
+  const [theme, setTheme] = useState<string>("");
   const [quoteError, setQuoteError] = useState<string>("");
   const [apiResponse, setApiResponse] = useState<string>("");
   const [image_url, setImageUrl] = useState<string>("");
@@ -17,16 +21,24 @@ export default function Home() {
 
   type PromptParams = {
     prompt: string,
-    initialPrompt?: string,
-    model?: string
+    model: string
   }
 
   const generatePrompts = async (params: PromptParams) => {
-    const defaultInitialPrompt = "You are a tale writer for kids with age between 4-7. Tell me a story which is around 1000 words about this prompt: "
+    let defaultInitialPrompt = "You are a story writer for kids. This story should be around 500 words splitted into 4-5 paragraphs."
+    if (character) {
+      defaultInitialPrompt += ` The main character is ${character}.`
+    }
+    if (activity) {
+      defaultInitialPrompt += ` The main character likes ${activity}.`
+    }
+    if (theme) {
+      defaultInitialPrompt += ` The theme of the story is ${theme}.`
+    }
     const response = await openai.createCompletion({
-      model: params.model || "text-curie-001",
-      prompt: (params.initialPrompt || defaultInitialPrompt) + prompt,
-      temperature: 0.5,
+      model: params.model,
+      prompt: defaultInitialPrompt + ` This story should include: ${prompt}.`,
+      temperature: 0.8,
       max_tokens: 1500,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
@@ -34,10 +46,9 @@ export default function Home() {
     return response.data.choices[0].text;
   };
 
-  const createImage = async (prompt = "create an image for a tale about animals and one small girl and one small boy") => {
-    const shortenedPrompt = await generatePrompts({ prompt, initialPrompt: "Shorten this prompt for dall-e api: " }) || "";
+  const createImage = async () => {
     const response = await openai.createImage({
-      prompt: "Create an image for a children tale: " + shortenedPrompt,
+      prompt: "Create an image for a children tale: " + character + " " + activity + " " + theme,
       n: 1,
       size: "512x512",
     });
@@ -50,8 +61,8 @@ export default function Home() {
     setApiResponse("");
 
     try {
-      const result = await generatePrompts({ prompt, model: "text-davinci-002" });
-      await createImage(result);
+      const result = await generatePrompts({ prompt, model: "text-davinci-003" });
+      await createImage();
       setApiResponse(result || "");
     } catch (e: any) {
       if (e.message == "Request failed with status code 429") {
@@ -74,7 +85,15 @@ export default function Home() {
   const renderTale = () => {
     return apiResponse ? (
       <div className="flex flex-col items-center justify-center mt-8">
-        {apiResponse}
+        {apiResponse.split('\n\n').map((paragraph, index) => {
+          return (
+            <>
+              <p key={index} className="text-lg text-gray-700 mb-4">{paragraph}</p>
+              <br />
+            </>
+          )
+        })}
+        <span>{ }</span>
       </div>
     ) : null;
   }
@@ -118,6 +137,11 @@ export default function Home() {
         <p className="text-xl mb-4 text-gray-500">Enter a brief info about the story</p>
         <div className="flex flex-col items-center justify-center w-full">
           <Textarea maxLength={500} className="border border-gray-400 rounded-lg p-2 mb-4 w-full" placeholder='use your imagination...' value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+          <AdditionalInfo
+            setTheme={setTheme}
+            setActivity={setActivity}
+            setCharacter={setCharacter}
+          />
           <Button
             className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-28'
             onClick={() => handleSubmit()}
@@ -129,7 +153,7 @@ export default function Home() {
         {renderSpinner()}
         {renderImage()}
         {renderTale()}
-        <h1 className="text-sm mb-4 text-gray-500 mt-16">Disclaimer: I want to make it clear that I do not take any responsibility for the content generated. Therefore, before reading the content to your children, please read it yourself and decide whether it is appropriate to share with them.</h1>
+        <h1 className="text-sm mb-4 text-gray-500 mt-16">Disclaimer: I want to make it clear \n\n that I do not take any responsibility for the content generated. Therefore, before reading the content to your children, please read it yourself and decide whether it is appropriate to share with them.</h1>
       </div>
     </main>
   )
