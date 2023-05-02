@@ -1,10 +1,10 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
+import "./globals.css"
+import { Inter } from "next/font/google"
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: 'AI story teller',
+  title: "AI story teller",
 }
 
 export default function RootLayout({
