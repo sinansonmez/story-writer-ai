@@ -1,5 +1,5 @@
-import React from 'react'
-import { Input } from '@chakra-ui/react'
+import React from "react"
+import { Input } from "@chakra-ui/react"
 
 type Props = {
   setCharacter: (character: string) => void,
@@ -9,7 +9,7 @@ type Props = {
 
 const AdditionalInfo = (props: Props) => {
   return (
-    <div className="flex flex-col mb-4" >
+    <div className="flex flex-col" >
       <div className="flex items-center justify-between mb-2">
         <span className="text-gray-500 mr-4" >Character: </span>
         <Input maxLength={20} className="border border-gray-400 rounded-lg p-2 w-56 h-38" placeholder='e.g. Jane' onChange={(e) => props.setCharacter(e.target.value)} />

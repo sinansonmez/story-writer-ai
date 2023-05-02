@@ -1,8 +1,8 @@
 "use client";
-import { Button, ButtonGroup, Textarea } from '@chakra-ui/react';
-import { Configuration, OpenAIApi } from 'openai';
-import { useState } from 'react'
-import AdditionalInfo from './additionalInfo';
+import { Button, ButtonGroup, Textarea } from "@chakra-ui/react";
+import { Configuration, OpenAIApi } from "openai";
+import { useState } from "react"
+import AdditionalInfo from "./additionalInfo";
 
 export default function Home() {
   const [prompt, setPrompt] = useState<string>("");
@@ -68,7 +68,7 @@ export default function Home() {
       if (e.message == "Request failed with status code 429") {
         setQuoteError("Monthly quota exceeded, please try again next month.")
       }
-      setApiResponse('Something went wrong, please try again.');
+      setApiResponse("Something went wrong, please try again.");
     }
 
     setLoading(false);
@@ -85,7 +85,7 @@ export default function Home() {
   const renderTale = () => {
     return apiResponse ? (
       <div className="flex flex-col items-center justify-center mt-8">
-        {apiResponse.split('\n\n').map((paragraph, index) => {
+        {apiResponse.split("\n\n").map((paragraph, index) => {
           return (
             <>
               <p key={index} className="text-lg text-gray-700 mb-4">{paragraph}</p>
@@ -120,7 +120,7 @@ export default function Home() {
             <Button
               backgroundColor="#FFDD00"
               className='hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded w-64'
-              onClick={() => window.open('https://www.buymeacoffee.com/sinans')}
+              onClick={() => window.open("https://www.buymeacoffee.com/sinans")}
             >
               Buy me a coffee
             </Button>
@@ -135,25 +135,34 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center w-full">
         <h1 className="text-4xl font-bold mb-4 text-gray-500">Write a short story using AI</h1>
         <p className="text-xl mb-4 text-gray-500">Enter a brief info about the story</p>
-        <div className="flex flex-col items-center justify-center w-full">
-          <Textarea maxLength={500} className="border border-gray-400 rounded-lg p-2 mb-4 w-full" placeholder='use your imagination...' value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+        <div className="flex flex-row justify-center w-full mb-4">
+          <div className="flex w-1/2 mr-8 items-center justify-between" >
+            <span className="text-gray-500 mr-4" >Content: </span>
+            <Textarea
+              maxLength={500}
+              className="border border-gray-400 rounded-lg p-2 h-full w-full"
+              placeholder='use your imagination...'
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+          </div>
           <AdditionalInfo
             setTheme={setTheme}
             setActivity={setActivity}
             setCharacter={setCharacter}
           />
-          <Button
-            className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-28'
-            onClick={() => handleSubmit()}
-            colorScheme='pink'
-          >
-            Generate
-          </Button>
         </div>
+        <Button
+          className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-28'
+          onClick={() => handleSubmit()}
+          colorScheme='pink'
+        >
+          Generate
+        </Button>
         {renderSpinner()}
         {renderImage()}
         {renderTale()}
-        <h1 className="text-sm mb-4 text-gray-500 mt-16">Disclaimer: I want to make it clear \n\n that I do not take any responsibility for the content generated. Therefore, before reading the content to your children, please read it yourself and decide whether it is appropriate to share with them.</h1>
+        <h1 className="text-sm mb-4 text-gray-500 mt-16">Disclaimer: I want to make it clear that I do not take any responsibility for the content generated. Therefore, before reading the content to your children, please read it yourself and decide whether it is appropriate to share with them.</h1>
       </div>
     </main>
   )
